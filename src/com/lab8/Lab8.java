@@ -2,6 +2,7 @@
 //Data Centric Web Applications
 //Connecting mongo to a java eclipse programme
 package com.lab8;
+import com.google.gson.Gson;
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
@@ -54,6 +55,22 @@ public class Lab8 {
 		//query.put("age",  new BasicDBObject("$gt", 20));
 		//FindIterable<Document> users = lab8col.find(query);
 		
+		/*
+		FindIterable<Document> users = lab8col.find().projection(fields(include("car"), excludeId()));
+		
+		//Deleting a person with an id of 102
+		BasicDBObject query = new BasicDBObject();
+		query.put("_id", 102);
+		lab8col.deleteOne(query);
+		
+		BasicDBObject queryA = new BasicDBObject();
+		queryA.put("$gt", 20);
+		BasicDBObject queryA1 = new BasicDBObject();
+		queryA.put("age", queryA);
+		lab8col.find(queryA1);
+		*/
+		
+		/*
 		//Adding data to the database
 		Document myDoc = new Document();
 		myDoc.append("_id", 400)
@@ -78,7 +95,9 @@ public class Lab8 {
 		docs.add(myDoc2);
 		
 		lab8col.insertMany(docs);
-
+		
+		*/
+		
 		/*
 		for (Document d : users) 
 		{
@@ -112,6 +131,65 @@ public class Lab8 {
 		}
 		*/
 		
+		/*
+		//creating new data manually
+		Car c1 = new Car();
+		c1.setFuel("petrol");
+		c1.setReg("192-G-1");
+
+		Car c2 = new Car();
+		c2.setFuel("diesel");
+		c1.setReg("10-WH-123");
+		
+		User u1 = new User();
+		u1.set_id(999);
+		u1.setAge(23);
+		u1.setEmail("tom@gmail.com");
+		u1.setFname("Tom");
+		u1.setSex("M");
+		u1.setSurname("Murphy");
+		u1.setTitle("Mr");
+		u1.setCar(c1);
+		
+		User u2 = new User();
+		u2.set_id(888);
+		u2.setAge(56);
+		u2.setEmail("Mary@gmail.com");
+		u2.setFname("Mary");
+		u2.setSex("F");
+		u2.setSurname("Smith");
+		u2.setTitle("Ms");
+		u2.setCar(c2);
+
+		//adding data to an array
+		ArrayList<User> userList = new ArrayList<User>();
+		userList.add(u1);
+		userList.add(u2);
+
+		for(User x : userList)
+		{
+			System.out.println(x);
+		}
+		
+		*/
+		
+		ArrayList<User> userList = new ArrayList<User>();
+		Gson gson = new Gson();
+		
+		FindIterable<Document> users = lab8col.find();
+
+		for (Document d : users)
+		{
+			   User user = gson.fromJson(d.toJson(), User.class);
+			   userList.add(user);
+		}
+		
+		for(User x: userList)
+		{
+			System.out.println(x);
+		}
+
+		//close
 		mongoClient.close();
 
 	}
